@@ -1,0 +1,5 @@
+<?php
+require_once __DIR__.'/../config/security.php';require_login();require_dongle();verify_csrf();
+function vig_dec($text,$key){$key=preg_replace('/[^a-z]/i','',strtolower($key));if(!$key)throw new Exception('Kunci Vigenere wajib diisi.');$o='';$j=0;for($i=0;$i<strlen($text);$i++){$c=$text[$i];if(ctype_alpha($c)){$b=ctype_upper($c)?65:97;$k=ord($key[$j++%strlen($key)])-97;$o.=chr((ord($c)-$b-$k+26)%26+$b);}else$o.=$c;}return $o;}
+try{$s=db()->prepare('SELECT * FROM messages WHERE id=? AND user_id=?');$s->execute([$_POST['id'],$_SESSION['user_id']]);$r=$s->fetch();if(!$r)throw new Exception('Pesan tidak ditemukan.');$plain=vig_dec(decrypt_data($r['ciphertext']),$_POST['vkey']);log_activity('MESSAGE_DECRYPTED',$r['title']);}catch(Throwable $e){$plain='Gagal: '.$e->getMessage();}
+?><!doctype html><html lang="id"><head><meta charset="utf-8"><link rel="stylesheet" href="../assets/style.css"><title>Hasil Dekripsi</title></head><body class="result"><div class="panel"><h1>Hasil Dekripsi</h1><pre><?=e($plain)?></pre><a class="btn" href="../pages/messages.php">Kembali</a></div></body></html>

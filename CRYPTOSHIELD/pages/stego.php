@@ -1,0 +1,4 @@
+<?php $pageTitle='Steganografi'; require '_header.php'; require_dongle(); ?>
+<div class="panel"><h2>Sisipkan pesan ke gambar</h2><p class="muted">Metode LSB pada kanal warna gambar. Hasil disimpan sebagai PNG agar bit pesan tetap terjaga.</p><label>Gambar PNG/JPG</label><input id="cover" type="file" accept="image/*"><label>Pesan rahasia</label><textarea id="secret" rows="3" placeholder="Tulis pesan..."></textarea><button class="btn" onclick="encodeStego()">Sisipkan & Unduh PNG</button><p id="stegoStatus" class="muted"></p><canvas id="stegoCanvas" class="hidden"></canvas></div>
+<div class="panel"><h2>Ekstrak pesan</h2><label>Pilih gambar hasil steganografi</label><input id="stegoInput" type="file" accept="image/png"><button class="btn secondary" onclick="decodeStego()">Ambil Pesan</button><pre id="decoded"></pre></div>
+<?php require '_footer.php';?>
